@@ -1,3 +1,6 @@
 node_modules
 variables.env
+variables.env.local
+variables.env.mlab
 public/dist/*
+.vscode
