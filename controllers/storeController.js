@@ -11,10 +11,8 @@ exports.addStore = (req, res) => {
 
 exports.createStore = async (req, res) => {
   const store = new Store(req.body);
-  console.log('i will save');
   await store.save();
   res.redirect('/');
-  console.log('i did save');
 };
 
 // this function has the porpuse to show how to get values fron the get url
