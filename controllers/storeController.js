@@ -2,6 +2,14 @@ exports.homePage = (req, res) => {
   res.render('index', {name:'perro', title: 'home'});
 };
 
+exports.addStore = (req, res) => {
+  res.render('editStore', {title: '💩 Add Store'});
+};
+
+exports.createStore = (req, res) => {
+  res.json(req.body);
+};
+
 // this function has the porpuse to show how to get values fron the get url
 exports.echoed = (req, res) => {
   if(Object.keys(req.query).length === 0 ){
