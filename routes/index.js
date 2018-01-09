@@ -1,11 +1,9 @@
 const express = require('express');
 const router = express.Router();
+const storeController = require('../controllers/storeController');
 
 // Do work here
-router.get('/', (req, res) => {
-  // res.send('Hey! It works!');
-  res.render('home', {name:'perro', title: 'home'}); // this is how to send a value to a templrate
-});
+router.get('/', storeController.homePage);
 
 router.get('/echoed', (req, res) => {
   if(Object.keys(req.query).length === 0 ){
