@@ -1,3 +1,6 @@
+const mongoose = require('mongoose');
+const Store = mongoose.model('Store');
+
 exports.homePage = (req, res) => {
   res.render('index', {name:'perro', title: 'home'});
 };
@@ -6,8 +9,12 @@ exports.addStore = (req, res) => {
   res.render('editStore', {title: '💩 Add Store'});
 };
 
-exports.createStore = (req, res) => {
-  res.json(req.body);
+exports.createStore = async (req, res) => {
+  const store = new Store(req.body);
+  console.log('i will save');
+  await store.save();
+  res.redirect('/');
+  console.log('i did save');
 };
 
 // this function has the porpuse to show how to get values fron the get url
