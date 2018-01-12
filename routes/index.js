@@ -8,9 +8,10 @@ router.get('/', storeController.homePage);
 router.get('/stores', catchErrors(storeController.getStores));
 router.get('/add', storeController.addStore);
 router.post('/add', catchErrors(storeController.createStore)); // this is a handler that will wrap the funtion to catch the errors
+router.get('/stores/:id/edit', catchErrors(storeController.editStore));
+router.post('/add/:id', catchErrors(storeController.updateStore)); // this is a handler that will wrap the funtion to catch the errors
 
 router.get('/echoed', storeController.echoed);
-
 router.get('/reverse/:name', storeController.reverse_name);
 
 module.exports = router;
