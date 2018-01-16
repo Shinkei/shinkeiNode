@@ -32,7 +32,8 @@ const storeSchema = new mongoose.Schema({
             type: String,
             required: 'you must supply an address'
         }
-    }
+    },
+    photo: String
 });
 
 // this function will execute every time before every save
