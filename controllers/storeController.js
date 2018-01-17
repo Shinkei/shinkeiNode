@@ -32,7 +32,7 @@ exports.resize = async (req, res, next) => {
   if (!req.file) {
     next();
     return;
-  }else{
+  } else {
     const extension = req.file.mimetype.split('/')[1];
     req.body.photo = `${uuid.v4()}.${extension}`;
     const photo = await jimp.read(req.file.buffer);
@@ -65,6 +65,15 @@ exports.updateStore = async (req, res) => {
   const store = await Store.findOneAndUpdate({ _id: req.params.id }, req.body, { new: true, runValidators: true }).exec();
   req.flash('success', `${store.name} successfully edited <a href="/stores/${store.slug}">View Store -></a>`);
   res.redirect(`/stores/${store._id}/edit`);
+};
+
+exports.getStoreBySlug = async (req, res, next) => {
+  const store = await Store.findOne({ slug: req.params.slug });
+  if (!store) {
+    next();
+    return;
+  }
+  res.render('store', { title: store.name, store });
 };
 
 // this function has the porpuse to show how to get values fron the get url

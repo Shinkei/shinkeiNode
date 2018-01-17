@@ -3,4 +3,5 @@ variables.env
 variables.env.local
 variables.env.mlab
 public/dist/*
+public/uploads
 .vscode
