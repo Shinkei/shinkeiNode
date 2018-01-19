@@ -76,6 +76,12 @@ exports.getStoreBySlug = async (req, res, next) => {
   res.render('store', { title: store.name, store });
 };
 
+exports.getStoresByTag = async (req, res) => {
+  const tags = await Store.getTagsList();
+  const tag = req.params.tag;
+  res.render('tags', { title: 'Tags', tags, tag })
+};
+
 // this function has the porpuse to show how to get values fron the get url
 exports.echoed = (req, res) => {
   if (Object.keys(req.query).length === 0) {
