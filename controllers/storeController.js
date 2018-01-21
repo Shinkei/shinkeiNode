@@ -46,7 +46,7 @@ exports.createStore = async (req, res) => {
   const store = new Store(req.body);
   await store.save();
   req.flash('success', `Successfully created ${store.name}. Care to leave a review?`);
-  res.redirect(`/store/${store.slug}`);
+  res.redirect(`/stores/${store.slug}`);
 };
 
 exports.getStores = async (req, res) => {
@@ -77,9 +77,12 @@ exports.getStoreBySlug = async (req, res, next) => {
 };
 
 exports.getStoresByTag = async (req, res) => {
-  const tags = await Store.getTagsList();
   const tag = req.params.tag;
-  res.render('tags', { title: 'Tags', tags, tag })
+  const tagQuery = tag || { $exists: true }
+  const tagsPromise = Store.getTagsList();
+  const storesPromise = Store.find({ tags: tagQuery });
+  const [tags, stores] = await Promise.all([tagsPromise, storesPromise]); // executes 2 promises at the same time an waits for them to finish
+  res.render('tags', { title: 'Tags', tags, tag, stores })
 };
 
 // this function has the porpuse to show how to get values fron the get url
