@@ -1,4 +1,6 @@
 const mongoose = require('mongoose');
+const User = require('../models/User');
+const promesify = require('es6-promisify');
 
 exports.loginForm = (req, res) => {
   res.render('login', { title: 'Login' });
@@ -24,8 +26,15 @@ exports.validateRegister = (req, res, next) => {
   const errors = req.validationErrors();
   if (errors) {
     req.flash('error', errors.map(err => err.msg));
-    res.render('register', {title: 'Register', body: req.body, flashes: req.flash()});
+    res.render('register', { title: 'Register', body: req.body, flashes: req.flash() });
     return;
   }
+  next();
+};
+
+exports.register = async (req, res, next) => {
+  const user = new User({ email: req.body.email, name: req.body.name });
+  const registerPromise = promesify(User.register, User); // the secont parameter is the object to bind the method
+  await registerPromise(user, req.body.password);
   next();
 };
