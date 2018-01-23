@@ -24,6 +24,9 @@ router.post('/login', authController.login);
 router.get('/logout', authController.logout);
 router.get('/account', authController.isLoggedIn, userController.account);
 router.post('/account', authController.isLoggedIn, catchErrors(userController.updateAccount));
+router.post('/account/forgot', catchErrors(authController.forgotPassword));
+router.get('/account/reset/:token', catchErrors(authController.reset));
+router.post('/account/reset/:token', authController.confirmedPasswords, catchErrors(authController.changePassword));
 
 router.get('/echoed', storeController.echoed);
 router.get('/reverse/:name', storeController.reverse_name);
