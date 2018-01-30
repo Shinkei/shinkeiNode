@@ -25,3 +25,5 @@ That will populate 16 stores with 3 authors and 41 reviews. The logins for the a
 |Beau|beau@example.com|beau|
 
 
+### Trowbleshooting
+> there is an error related with the data base `(node:3840) UnhandledPromiseRejectionWarning: BulkWriteError: E11000 duplicate key error collection: my_db.users index: username_1 dup key: { :null }` something related with a duplicated key, to temporaly solve this error just delete the index in mongo for username_1
