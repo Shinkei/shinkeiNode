@@ -31,5 +31,5 @@ exports.send = async (options) => {
   };
 
   const sendMailPromise = promisify(transport.sendMail, transport);
-  return sendMailPromise(mailOptions)
+  return sendMailPromise(mailOptions);
 };

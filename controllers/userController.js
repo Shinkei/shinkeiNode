@@ -1,4 +1,3 @@
-const mongoose = require('mongoose');
 const User = require('../models/User');
 const promesify = require('es6-promisify');
 
@@ -34,14 +33,15 @@ exports.validateRegister = (req, res, next) => {
 
 exports.register = async (req, res, next) => {
   const user = new User({ email: req.body.email, name: req.body.name });
-  const registerPromise = promesify(User.register, User); // the secont parameter is the object to bind the method
+  // the secont parameter is the object to bind the method
+  const registerPromise = promesify(User.register, User);
   await registerPromise(user, req.body.password);
   next();
 };
 
 exports.account = (req, res) => {
   res.render('account', { title: 'Edit Your Account' });
-}
+};
 
 exports.updateAccount = async (req, res) => {
   const updates = {
@@ -49,7 +49,7 @@ exports.updateAccount = async (req, res) => {
     email: req.body.email
   };
 
-  const user = await User.findOneAndUpdate(
+  await User.findOneAndUpdate(
     { _id: req.user._id },
     { $set: updates },
     { new: true, runValidators: true, context: 'query' }

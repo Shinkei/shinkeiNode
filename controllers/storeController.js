@@ -1,8 +1,9 @@
 const mongoose = require('mongoose');
 const multer = require('multer');
-const Store = mongoose.model('Store');
 const jimp = require('jimp');
 const uuid = require('uuid');
+
+const Store = mongoose.model('Store');
 
 const multerOptions = {
   storage: multer.memoryStorage(),
@@ -25,21 +26,20 @@ exports.addStore = (req, res) => {
   res.render('editStore', { title: '💩 Add Store' });
 };
 
-// middleware to validate the images 
+// middleware to validate the images
 exports.upload = multer(multerOptions).single('photo');
 
 exports.resize = async (req, res, next) => {
   if (!req.file) {
     next();
     return;
-  } else {
-    const extension = req.file.mimetype.split('/')[1];
-    req.body.photo = `${uuid.v4()}.${extension}`;
-    const photo = await jimp.read(req.file.buffer);
-    await photo.resize(800, jimp.AUTO);
-    await photo.write(`./public/uploads/${req.body.photo}`);
-    next();
   }
+  const extension = req.file.mimetype.split('/')[1];
+  req.body.photo = `${uuid.v4()}.${extension}`;
+  const photo = await jimp.read(req.file.buffer);
+  await photo.resize(800, jimp.AUTO);
+  await photo.write(`./public/uploads/${req.body.photo}`);
+  next();
 };
 
 exports.createStore = async (req, res) => {
@@ -55,7 +55,7 @@ exports.getStores = async (req, res) => {
   res.render('stores', { title: 'Stores', stores });
 };
 
-const confirmOwner = (store, user) =>{
+const confirmOwner = (store, user) => {
   if (!store.author.equals(user._id)) {
     throw Error('You must own a store in order to edit it');
   }
@@ -70,7 +70,11 @@ exports.editStore = async (req, res) => {
 exports.updateStore = async (req, res) => {
   req.body.location.type = 'Point';
 
-  const store = await Store.findOneAndUpdate({ _id: req.params.id }, req.body, { new: true, runValidators: true }).exec();
+  const store = await Store.findOneAndUpdate(
+    { _id: req.params.id },
+    req.body,
+    { new: true, runValidators: true }
+  ).exec();
   req.flash('success', `${store.name} successfully edited <a href="/stores/${store.slug}">View Store -></a>`);
   res.redirect(`/stores/${store._id}/edit`);
 };
@@ -85,12 +89,13 @@ exports.getStoreBySlug = async (req, res, next) => {
 };
 
 exports.getStoresByTag = async (req, res) => {
-  const tag = req.params.tag;
-  const tagQuery = tag || { $exists: true }
+  const { tag } = req.params;
+  const tagQuery = tag || { $exists: true };
   const tagsPromise = Store.getTagsList();
   const storesPromise = Store.find({ tags: tagQuery });
-  const [tags, stores] = await Promise.all([tagsPromise, storesPromise]); // executes 2 promises at the same time an waits for them to finish
-  res.render('tags', { title: 'Tags', tags, tag, stores })
+  // executes 2 promises at the same time an waits for them to finish
+  const [tags, stores] = await Promise.all([tagsPromise, storesPromise]);
+  res.render('tags', { title: 'Tags', tags, tag, stores });
 };
 
 // this function has the porpuse to show how to get values fron the get url
