@@ -29,6 +29,8 @@ router.post('/account/forgot', catchErrors(authController.forgotPassword));
 router.get('/account/reset/:token', catchErrors(authController.reset));
 router.post('/account/reset/:token', authController.confirmedPasswords, catchErrors(authController.changePassword));
 
+router.get('/api/v1/search', catchErrors(storeController.searchStores));
+
 router.get('/echoed', storeController.echoed);
 router.get('/reverse/:name', storeController.reverse_name);
 

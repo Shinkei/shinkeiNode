@@ -11,8 +11,7 @@ const multerOptions = {
     const isPhoto = file.mimetype.startsWith('image/');
     if (isPhoto) {
       next(null, true);
-    }
-    else {
+    } else {
       next({ message: 'That file type is not allowed' }, false);
     }
   }
@@ -63,7 +62,7 @@ const confirmOwner = (store, user) => {
 
 exports.editStore = async (req, res) => {
   const store = await Store.findOne({ _id: req.params.id });
-  confirmOwner(store,req.user);
+  confirmOwner(store, req.user);
   res.render('editStore', { title: `Edit 💩 ${store.name}`, store });
 };
 
@@ -98,14 +97,20 @@ exports.getStoresByTag = async (req, res) => {
   res.render('tags', { title: 'Tags', tags, tag, stores });
 };
 
+exports.searchStores = async (req, res) => {
+  const stores = await Store
+    .find({ $text: { $search: req.query.q } }, { score: { $meta: 'textScore' } })
+    .sort({score:{$meta:'textScore'}})
+    .limit(5);
+  res.json(stores);
+};
+
 // this function has the porpuse to show how to get values fron the get url
 exports.echoed = (req, res) => {
   if (Object.keys(req.query).length === 0) {
     res.send('try to send parameters in the url, eg: echoed?param1=value1&param2=value2');
   }
-  else {
-    res.send(req.query);
-  }
+  res.send(req.query);
 };
 
 // this function reverse the given name in the url

@@ -42,8 +42,11 @@ const storeSchema = new mongoose.Schema({
   }
 });
 
+// define indexes
+storeSchema.index({name: 'text', description: 'text'});
+
 // this function will execute every time before every save
-storeSchema.pre('save', async function (next) {
+storeSchema.pre('save', async next => {
   if (!this.isModified('name')) {
     next();
     return;
