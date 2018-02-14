@@ -30,6 +30,7 @@ router.get('/account/reset/:token', catchErrors(authController.reset));
 router.post('/account/reset/:token', authController.confirmedPasswords, catchErrors(authController.changePassword));
 
 router.get('/api/v1/search', catchErrors(storeController.searchStores));
+router.get('/api/v1/stores/near', catchErrors(storeController.mapStores));
 
 router.get('/echoed', storeController.echoed);
 router.get('/reverse/:name', storeController.reverse_name);

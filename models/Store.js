@@ -43,7 +43,10 @@ const storeSchema = new mongoose.Schema({
 });
 
 // define indexes
-storeSchema.index({name: 'text', description: 'text'});
+storeSchema.index({ name: 'text', description: 'text' });
+
+// location is  geospatial data
+storeSchema.index({ location: '2dsphere' });
 
 // this function will execute every time before every save
 storeSchema.pre('save', async next => {

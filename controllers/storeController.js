@@ -100,7 +100,7 @@ exports.getStoresByTag = async (req, res) => {
 exports.searchStores = async (req, res) => {
   const stores = await Store
     .find({ $text: { $search: req.query.q } }, { score: { $meta: 'textScore' } })
-    .sort({score:{$meta:'textScore'}})
+    .sort({ score: { $meta: 'textScore' } })
     .limit(5);
   res.json(stores);
 };
@@ -117,4 +117,23 @@ exports.echoed = (req, res) => {
 exports.reverse_name = (req, res) => {
   const reverse = [...req.params.name].reverse().join('');
   res.send(reverse);
+};
+
+
+exports.mapStores = async (req, res) => {
+  const coordinates = [+req.query.lng, +req.query.lat];
+  const query = {
+    location: {
+      $near: {
+        $geometry: {
+          type: 'Point',
+          coordinates
+        },
+        $maxDistance: 10000
+      }
+    }
+  };
+
+  const stores = await Store.find(query).select('name slug description location').limit(10);
+  res.json(stores);
 };
