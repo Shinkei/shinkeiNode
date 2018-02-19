@@ -31,6 +31,7 @@ router.post('/account/reset/:token', authController.confirmedPasswords, catchErr
 
 router.get('/api/v1/search', catchErrors(storeController.searchStores));
 router.get('/api/v1/stores/near', catchErrors(storeController.mapStores));
+router.post('/api/v1/stores/:id/heart', catchErrors(storeController.heartStore));
 
 router.get('/map', storeController.mapPage);
 
