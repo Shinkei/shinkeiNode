@@ -94,7 +94,9 @@ exports.getStoresByTag = async (req, res) => {
   const storesPromise = Store.find({ tags: tagQuery });
   // executes 2 promises at the same time an waits for them to finish
   const [tags, stores] = await Promise.all([tagsPromise, storesPromise]);
-  res.render('tags', { title: 'Tags', tags, tag, stores });
+  res.render('tags', {
+    title: 'Tags', tags, tag, stores
+  });
 };
 
 exports.searchStores = async (req, res) => {
@@ -134,6 +136,10 @@ exports.mapStores = async (req, res) => {
     }
   };
 
-  const stores = await Store.find(query).select('name slug description location').limit(10);
+  const stores = await Store.find(query).select('name slug description location photo').limit(10);
   res.json(stores);
+};
+
+exports.mapPage = (req, res) => {
+  res.render('map', { title: 'Map' });
 };
