@@ -35,6 +35,8 @@ router.post('/api/v1/stores/:id/heart', catchErrors(storeController.heartStore))
 
 router.get('/map', storeController.mapPage);
 
+router.get('/hearts', authController.isLoggedIn, catchErrors(storeController.getHearts));
+
 router.get('/echoed', storeController.echoed);
 router.get('/reverse/:name', storeController.reverse_name);
 
