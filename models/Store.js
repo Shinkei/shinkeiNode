@@ -40,6 +40,10 @@ const storeSchema = new mongoose.Schema({
     ref: 'User',
     required: 'You must supply an author'
   }
+}, {
+  // explicitely ask for the virtual fields to be in the json or object when build
+  toJSON: { virtuals: true },
+  toObject: { virtuals: true }
 });
 
 // define indexes
@@ -49,7 +53,7 @@ storeSchema.index({ name: 'text', description: 'text' });
 storeSchema.index({ location: '2dsphere' });
 
 // this function will execute every time before every save
-storeSchema.pre('save', async next => {
+storeSchema.pre('save', async (next) => {
   if (!this.isModified('name')) {
     next();
     return;
@@ -71,5 +75,12 @@ storeSchema.statics.getTagsList = function () {
     { $sort: { count: -1 } }
   ]);
 };
+
+// find the reviews of the store
+storeSchema.virtual('reviews', {
+  ref: 'Review',
+  localField: '_id', // field on the store
+  foreignField: 'store' // field on the review
+});
 
 module.exports = mongoose.model('Store', storeSchema);
