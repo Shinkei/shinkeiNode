@@ -10,6 +10,7 @@ const router = express.Router();
 // Do work here
 router.get('/', storeController.homePage);
 router.get('/stores', catchErrors(storeController.getStores));
+router.get('/stores/page/:page', catchErrors(storeController.getStores));
 router.get('/add', authController.isLoggedIn, storeController.addStore);
 router.post('/add', storeController.upload, catchErrors(storeController.resize), catchErrors(storeController.createStore)); // this is a handler that will wrap the funtion to catch the errors
 router.get('/stores/:id/edit', catchErrors(storeController.editStore));
